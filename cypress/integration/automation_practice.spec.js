@@ -94,10 +94,10 @@ context("automationpractice website testing", () => {
 
   describe('Category page tests', () => {
 
-    it.only('Category page - verify if all filter checkboxes can be checked and unchecked', () => {
+    it('Category page - verify if all filters checkboxes can be checked and unchecked', () => {
 
       //Click first category from menu on main page
-      cy.get('.sf-with-ul').first().click()
+      cy.get('.sf-with-ul').first().click();
 
       //Verify if User was redirected to the new page
       cy.url().should('include', 'controller=category');
@@ -106,19 +106,62 @@ context("automationpractice website testing", () => {
       //Check all checkboxes. 
       //Get parent of each checkbox. 
       //Verify if parent of each checkbox has class 'checked' which is added when element is checked.
-      cy.get('.checkbox').check().parent().should('have.class', 'checked')
+      cy.get('.checkbox').check().parent().should('have.class', 'checked');
 
 
       //Get all filters checkkoxes.
       //Uncheck all checkboxes. 
       //Get parent of each checkbox. 
       //Verify if parent of each checkbox doesn't have class 'checked' which is removed when element is unchecked.
-      cy.get('.checkbox').uncheck().parent().should('not.have.class', 'checked')
+      cy.get('.checkbox').uncheck().parent().should('not.have.class', 'checked');
+
+    })
+
+    it('Category page - random checkbox checking and unchecking', () => {
+
+      //Function to generate random number 
+      const randomGenerator = (number) => {
+        return Math.round(Math.random() * (number - 1))
+      }
+
+      //Click first category from menu on main pagep
+      cy.get('.sf-with-ul').first().click();
+
+      //Verify if User was redirected to the new page
+      cy.url().should('include', 'controller=category');
+
+
+      //Get lenght of all checkboxes, 
+      cy.get('.checkbox').its('length').then(($lenght) => {
+
+
+        //Create variable with generated random naumber. 
+        //Random number is generated for range from 0 to checkboxes range length - 1
+        const listElementNumber = randomGenerator($lenght);
+
+
+        //From list of checkboxes select 1 random checkbox. 
+        //Check it and assert if its parent has 'checked' class. 
+        //Use callback function to store its 
+        cy.get('.checkbox').eq(listElementNumber).check()
+        .parent().should('have.class', 'checked').then(($checkbox) => {
+
+          //Since '$checkbox" stores parent of tested checbox,
+          //we need to descendent checkbox again, 
+          //uncheck it and assert if it no longer contain 'checked' class
+          cy.get($checkbox).find('.checkbox').
+          uncheck().should('not.have.class', 'checked');
+
+        })
+
+
+      })
 
     })
 
   })
 
-  
 })
+
+
 
