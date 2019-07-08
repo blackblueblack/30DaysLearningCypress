@@ -12,7 +12,6 @@ context("automationpractice website testing", () => {
       const sizesPhones = ['iphone-6', 'iphone-5']
 
       sizesPhones.forEach((size) => {
-
         it(`Should display mobile menu on screen size: ${size}`, () => {
           //Change screen size according value from the array. 
           cy.viewport(size);
@@ -20,7 +19,7 @@ context("automationpractice website testing", () => {
           cy.get('.sf-menu').should('not.be.visible');
           //Click on "Categories" block
           cy.get('.cat-title').click();
-          //Verify if list if categories is presented
+          //Verify if list of categories is presented
           //by clicking on first category. 
           cy.get('.sf-menu').find('li').first().click();
           //Assert new url. 
@@ -63,6 +62,7 @@ context("automationpractice website testing", () => {
       })
       
       it('Header: Product searching - valid and invalid input', () => {
+
         //List which stores inputs and expected results 
         const inputs = [
           { product: 'dress', returned_info: 'Sort by' },
@@ -74,9 +74,8 @@ context("automationpractice website testing", () => {
         //and verifies expected string visibility 
         inputs.forEach(input => {
           const { product, returned_info } = input;
-          cy.get('#search_query_top').type(product);
-          cy.get('#searchbox > .btn').click();
-          cy.url().should('include', 'submit_search=');
+          //Custom command
+          cy.searchProduct(product);
           cy.contains(returned_info).should('be.visible');
           cy.get('.search_query').clear();
         })
@@ -101,21 +100,18 @@ context("automationpractice website testing", () => {
 
   describe('Product Page tests', () => {
     it('Product Page: Verify if size input field has pre-selected option', () => {
-      //Click first product form home page products list
-      cy.get(".replace-2x.img-responsive").first().click()
+      cy.clickRandomProduct()
       //Get select size input field.
       //Find its option with title "S". 
       //Verify if "S" option has attribute "selected".
-      cy.get("#group_1").find("[title=S]").should("have.attr", "selected")
+      cy.get("#group_1").find("[title=S]").should("have.attr", "selected");
     })
   })
 
   describe('Category Page tests', () => {
     it('Category Page: Verify if all filters checkboxes can be checked and unchecked', () => {
-      //Click first category from menu on main page.
-      cy.get('.sf-with-ul').first().click();
-      //Verify if User was redirected to the new page.
-      cy.url().should('include', 'controller=category');
+      //Custom command 
+      cy.clickRandomCategory();
       //Get all filters checkkoxes.
       //Check all checkboxes. 
       //Get parent of each checkbox. 
@@ -129,25 +125,18 @@ context("automationpractice website testing", () => {
     })
 
     it('Category Page: Random checkbox checking and unchecking', () => {
-      //Function to generate random number 
-      const randomGenerator = (number) => {
-        return Math.round(Math.random() * (number - 1))
-      }
-
-      //Click first category from menu on main pagep
-      cy.get('.sf-with-ul').first().click();
-      //Verify if User was redirected to the new page
-      cy.url().should('include', 'controller=category');
+      //Custom command 
+      cy.clickRandomCategory();
       //Get lenght of all checkboxes, 
-      cy.get('.checkbox').debug().its('length').then(($lenght) => {
+      cy.get('.checkbox').its('length').then(($lenght) => {
         //Create variable with generated random naumber. 
         //Random number is generated for range from 0 to checkboxes list length - 1
-        const listElementNumber = randomGenerator($lenght);
+        const randomNumber = Cypress._.random(0, $lenght);
 
         //From list of checkboxes select 1 random checkbox. 
         //Check it and assert if its parent has 'checked' class. 
-        //Use callback function to store its 
-        cy.get('.checkbox').eq(listElementNumber).check()
+        //Use callback function to store parent
+        cy.get('.checkbox').eq(randomNumber).check()
           .parent().should('have.class', 'checked').then(($checkbox) => {
             //Since '$checkbox" stores parent of tested checbox,
             //we need to find descendent checkbox again, 
@@ -157,11 +146,10 @@ context("automationpractice website testing", () => {
           })
       })
     })
+    //TOD0
+    // // it('Slider', () => {
+    // //    cy.clickRandomCategory()
+    // //    cy.get('.ui-slider-handle').first().invoke('val', 25).trigger('mousemove').trigger('mousedown')
+    // })
   })
 })
-
-
-
-
-
-
