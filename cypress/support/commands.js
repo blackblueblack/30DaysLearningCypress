@@ -24,11 +24,13 @@
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
+import 'cypress-file-upload'
+
 
 //Click random category on Website Header to navigate to Category Page. 
 Cypress.Commands.add("clickRandomCategory", () => {
   cy.get('#block_top_menu').find('ul').first().children().its('length').then(($lenght) => {
-    const randomNumber = Cypress._.random(0, $lenght);
+    const randomNumber = Cypress._.random(0, $lenght - 1);
     cy.get('#block_top_menu').find('ul').first().children().eq(randomNumber).click();
     cy.url().should('include', 'controller=category');
   })
@@ -37,7 +39,7 @@ Cypress.Commands.add("clickRandomCategory", () => {
 //Click random product on Main Page to navigate to Product Page. 
 Cypress.Commands.add("clickRandomProduct", () => {
   cy.get('.homefeatured').children().its('length').then(($lenght) => {
-    const randomNumber = Cypress._.random(0, $lenght -1);
+    const randomNumber = Cypress._.random(0, $lenght - 1);
     cy.get('.homefeatured').children().eq(randomNumber).click();
     cy.url().should('include', 'controller=product');
   })

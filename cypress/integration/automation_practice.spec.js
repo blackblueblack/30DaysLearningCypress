@@ -8,7 +8,7 @@ context("automationpractice website testing", () => {
   describe('Website Header tests', () => {
     //HEADER - MOBILE TESTS 
     context('Header - mobile', () => {
-      
+
       const sizesPhones = ['iphone-6', 'iphone-5']
 
       sizesPhones.forEach((size) => {
@@ -60,7 +60,7 @@ context("automationpractice website testing", () => {
         //Assert redirection to new url.
         cy.url().should('include', 'controller=order');
       })
-      
+
       it('Header: Product searching - valid and invalid input', () => {
 
         //List which stores inputs and expected results 
@@ -76,12 +76,12 @@ context("automationpractice website testing", () => {
           const { product, returned_info } = input;
           //Custom command
           cy.searchProduct(product);
-          cy.contains(returned_info).should('be.visible');
+          cy.contains(returned_info).should('be.visible')
           cy.get('.search_query').clear();
         })
         //Click search when there is no input 
         cy.get('#searchbox > .btn').click();
-        cy.contains('Please enter a search keyword');
+        cy.get('.alert').should('contain', 'Please enter a search keyword');
       })
 
       it('Header: Verify if autocomplete drop-down list for search input field is selectable', () => {
@@ -151,5 +151,42 @@ context("automationpractice website testing", () => {
     // //    cy.clickRandomCategory()
     // //    cy.get('.ui-slider-handle').first().invoke('val', 25).trigger('mousemove').trigger('mousedown')
     // })
+  })
+
+  describe('Contact Form Page tests', () => {
+    it("Send message with file uploaded", () => {
+      //Navigate from Main Page to Contact Form Page.
+      cy.contains('Contact us').click();
+      //Check redirection by asserting url. 
+      cy.url().should('include', 'controller=contact')
+      //Fill in all fields. 
+      cy.get('#message').type('messsssage');
+      cy.get('#id_contact').select('Webmaster');
+      cy.get('#email').type('test@test.pl');
+      cy.get('#id_order').type('xxxx');
+      //Before uploading file assert empty input filed text placeholder. 
+      cy.get('.filename').should('contain', 'No file selected');
+      //Get file to upload from fixture. 
+      //Get file upload input field. 
+      //Provide its properties. 
+      cy.fixture('file_to_upload.txt', 'base64').then(fileContent => {
+        cy.get('#fileUpload').upload(
+          {
+            fileName: 'file_to_upload.txt',
+            mimeType: 'text'
+          },
+
+          {
+            uploadType: 'input'
+          });
+      })
+      //Check if file is uploaded by asserting input filed text. 
+      cy.get('.filename').should('contain', 'file_to_upload.txt');
+      //Submit form. 
+      cy.get("#submitMessage").click();
+      //Assert if url is the same 
+      cy.url().should('include', 'controller=contact')
+      cy.get('.alert').should('contain', 'Your message has been successfully sent to our team.');
+    })
   })
 })
