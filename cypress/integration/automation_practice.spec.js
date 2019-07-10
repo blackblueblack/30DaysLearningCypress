@@ -2,7 +2,8 @@
 
 context("automationpractice website testing", () => {
   beforeEach(() => {
-    cy.visit('http://automationpractice.com/index.php');
+    cy.visit('/');
+    cy.fixture("input_data").as("inputData");
   })
 
   describe('Website Header tests', () => {
@@ -62,25 +63,27 @@ context("automationpractice website testing", () => {
       })
 
       it('Header: Product searching - valid and invalid input', () => {
+        //Getting input data from aliased fixture file
+        //and using then() with callback to work with data from this file
+        cy.get("@inputData").then((inputData) => {
 
-        //List which stores inputs and expected results 
-        const inputs = [
-          { product: 'dress', returned_info: 'Sort by' },
-          { product: 'xxxTT^&LL', returned_info: 'No results' },
-          { product: ' ', returned_info: 'No results' }]
+          //Variable which stores product input data. 
+          //Data is taken from fixture file
+          const input = inputData.products;
 
-        //Loop which iterates over list of inputs, 
-        //submits each input 
-        //and verifies expected string visibility 
-        inputs.forEach(input => {
-          const { product, returned_info } = input;
-          //Custom command
-          cy.searchProduct(product);
-          cy.contains(returned_info).should('be.visible')
-          cy.get('.search_query').clear();
+          //Loop which iterates over list of inputs, submits each input
+          //and verifies expected string visibility.
+          input.forEach(input => {
+            const { product, returned_info } = input;
+            //Custom command
+            cy.searchProduct(product);
+            cy.contains(returned_info).should('be.visible')
+            cy.get('.search_query').clear();
+          })
         })
         //Click search when there is no input 
         cy.get('#searchbox > .btn').click();
+        //Assert if alert with expected text is visible. 
         cy.get('.alert').should('contain', 'Please enter a search keyword');
       })
 
@@ -175,7 +178,6 @@ context("automationpractice website testing", () => {
             fileName: 'file_to_upload.txt',
             mimeType: 'text'
           },
-
           {
             uploadType: 'input'
           });
@@ -186,6 +188,7 @@ context("automationpractice website testing", () => {
       cy.get("#submitMessage").click();
       //Assert if url is the same 
       cy.url().should('include', 'controller=contact')
+      //Assert alert text 
       cy.get('.alert').should('contain', 'Your message has been successfully sent to our team.');
     })
   })
