@@ -71,7 +71,7 @@ context("automationpractice website testing", () => {
           //Data is taken from fixture file
           const input = inputData.products;
 
-          //Loop which iterates over list of inputs, submits each input
+          //Loop which iterates over array of inputs, submits each input
           //and verifies expected string visibility.
           input.forEach(input => {
             const { product, returned_info } = input;
