@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "cypress-dark": "^1.7.13",
+    "loadash": "^1.0.0",
     "node-pre-gyp": "^0.13.0"
   }
 }
