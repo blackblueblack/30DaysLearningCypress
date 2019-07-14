@@ -95,9 +95,28 @@ context("automationpractice website testing", () => {
         //Check if there is <li> tag which contains "Dress" text.
         //Click on the returned element.
         cy.get('.ac_results').find('li').contains('Dress').click();
-        //Assert url to verify if click on drop-down element redirects to expeted page
+        //Assert url to verify if click on drop-down element redirects to expeted page.
         cy.url().should('include', 'controller=product');
       })
+
+      it.only('Header: Verify if state of the Cart is kept', () => {
+        //Function which asserts state of the Cart containing 1 product.
+        const testCartState = () => {
+          cy.url().should('include', 'controller=product')
+          cy.get('.ajax_cart_quantity').first().invoke('text').should('equal', '1')
+        }
+       
+        //Invoke custom command which navigates to random product page.
+        cy.clickRandomProduct();
+        //Add selected product to cart
+        cy.get('#add_to_cart').click();
+        //Select 'to continue shopping' on modal.
+        //Assert state of cart (if it presents correct number).
+        cy.get('.continue').click().then(testCartState);
+        //Reload page 
+        //and assert the Cart's state (should keep previous number of products).
+        cy.reload().then(testCartState)
+      }) 
     })
   })
 
