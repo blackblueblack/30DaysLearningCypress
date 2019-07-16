@@ -99,7 +99,7 @@ context("automationpractice website testing", () => {
         cy.url().should('include', 'controller=product');
       })
 
-      it.only('Header: Verify if state of the Cart is kept', () => {
+      it('Header: Verify if state of the Cart is kept', () => {
         //Function which asserts state of the Cart containing 1 product.
         const testCartState = () => {
           cy.url().should('include', 'controller=product')
@@ -117,6 +117,7 @@ context("automationpractice website testing", () => {
         //and assert the Cart's state (should keep previous number of products).
         cy.reload().then(testCartState)
       }) 
+
     })
   })
 

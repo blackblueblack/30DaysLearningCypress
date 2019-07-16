@@ -1,3 +1,7 @@
-{
-  "baseUrl": "http://automationpractice.com/index.php"
-}
+{"baseUrl": "http://automationpractice.com/index.php", 
+ "reporter": "cypress-multi-reporters", 
+ "reporterOptions": {
+   "configFile": "reporterOptions.json"
+ }
+   
+ }
