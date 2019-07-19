@@ -2,7 +2,7 @@
 
 context("automationpractice website testing", () => {
   beforeEach(() => {
-    cy.visit('/');
+    cy.visit('http://automationpractice.com/index.php');
     cy.fixture("input_data").as("inputData");
   })
 

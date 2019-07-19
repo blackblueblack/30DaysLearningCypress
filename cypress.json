@@ -1,4 +1,4 @@
-{"baseUrl": "http://automationpractice.com/index.php", 
+{"baseUrl": "https://flask-rest-api-demo.herokuapp.com/", 
  "reporter": "cypress-multi-reporters", 
  "reporterOptions": {
    "configFile": "reporterOptions.json"
