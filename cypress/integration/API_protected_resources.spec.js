@@ -1,6 +1,6 @@
 /// <reference types="Cypress" />
 
-context('Protected endpoints testing', () => {
+context('Protected endpoints - role-based testing', () => {
 
   let user
 
@@ -16,43 +16,154 @@ context('Protected endpoints testing', () => {
     })
   }
   //Method  to authenticate User. 
-    //User credentials are taken from separate file (cypress.env.json)
-    const getAdmin = (userRole) =>
-      cy.request({
-        url: 'http://localhost:4000/users/authenticate',
-        method: 'POST',
-        body: Cypress.env(userRole)
-      }).its('body')
-        .then((res) => {
-          user = res
-        })
+  //User credentials are taken from separate file (cypress.env.json).
+  const authenticateUser = (userRole) =>
+    cy.request({
+      url: 'http://localhost:4000/users/authenticate',
+      method: 'POST',
+      body: Cypress.env(userRole)
+    }).its('body')
+      .then((res) => {
+        user = res
+      })
 
-  describe('Admin role testing', () => {
+  const getUsers = () =>
+    cy.request({
+      url: 'http://localhost:4000/users',
+      auth: {
+        bearer: user.token,
+      }
+    })
+  describe('Role: ADMIN', () => {
 
-    beforeEach(() => {
-      getAdmin('admin')
+    before(() => {
+      authenticateUser('admin')
     })
     beforeEach(setUser)
 
     it("Admin can get /users", () => {
-
-      cy.request({
-        url: 'http://localhost:4000/users',
-        auth: {
-          bearer: user.token,
-        },
-      }).then((res => {
+      getUsers().then((res => {
         expect(res.status).to.eq(200)
       }))
     })
 
-    it("List of users contains expected number of elements", () => {
+    it('/users returns json', () => {
+      getUsers().its('headers').its('content-type').then((res) => {
+        expect(res).to.contain('application/json')
+      })
+    })
+
+    it('/users array contains expected number of elements', () => {
+      getUsers().its('body').should('have.length', 2)
+    })
+
+    it('Each User has expected properties', () => {
+      getUsers().its('body').each(value =>
+        expect(value).to.have.all.keys('id', 'username', 'firstName', 'lastName', 'role'))
+    })
+
+    it('Admin has role "admin" ', () => {
+      cy.request({
+        url: 'http://localhost:4000/users/1',
+        auth: {
+          bearer: user.token,
+        },
+      }).its('body').then((res) => {
+        expect(res).have.property('role', 'Admin')
+      })
+    })
+
+    it('Admin user has access to all users data', () => {
+      const userIndex = [1, 2]
+      userIndex.forEach(element => {
+        cy.request({
+          url: `http://localhost:4000/users/${element}`,
+          auth: {
+            bearer: user.token,
+          },
+        }).then((res => {
+          expect(res.status).to.eq(200)
+        }))
+      })
+    })
+  })
+
+  describe('Role: NORMAL USER', () => {
+
+    before(() => {
+      authenticateUser('normalUser')
+    })
+    beforeEach(setUser)
+
+    it(" Normal user cannot get /users", () => {
+
       cy.request({
         url: 'http://localhost:4000/users',
         auth: {
           bearer: user.token,
         },
-      }).its('body').should('have.length', 2)
+        failOnStatusCode: false
+      }).then((res => {
+        expect(res.status).to.eq(401)
+      }))
+    })
+
+    it('Normal User has role "User" ', () => {
+      cy.request({
+        url: 'http://localhost:4000/users/2',
+        auth: {
+          bearer: user.token,
+        },
+      }).its('body').then((res) => {
+        expect(res).have.property('role', 'User')
+      })
+    })
+
+
+    it('Normal user has access to only its data - users/1', () => {
+      const userIndex = [1, 2]
+      userIndex.forEach(element => {
+        cy.request({
+          url: `http://localhost:4000/users/${element}`,
+          auth: {
+            bearer: user.token,
+          },
+          failOnStatusCode: false
+        }).then((res) => {
+          if (element == 2) {
+            expect(res.status).to.eq(200)
+          } else {
+            expect(res.status).to.eq(401)
+          }
+        })
+
+      })
+    })
+  })
+
+  describe('Role: UNAUTHORIZED USER', () => {
+
+    it(" Unauthorized user cannot get /users", () => {
+
+      cy.request({
+        url: 'http://localhost:4000/users',
+        failOnStatusCode: false
+      }).then((res => {
+        expect(res.status).to.eq(401)
+      }))
+    })
+
+    it('Unauthorized user does not have access to user data', () => {
+      const userIndex = [1, 2]
+      userIndex.forEach(element => {
+        cy.request({
+          url: 'http://localhost:4000/users/${element}',
+          failOnStatusCode: false
+        }).then((res) => {
+          expect(res.status).to.eq(401)
+        })
+      });
     })
   })
 })
+

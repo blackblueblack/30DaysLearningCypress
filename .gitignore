@@ -2,5 +2,6 @@ node_modules
 cypress/reports/
 mochareports/
 cypress.env.json
+.eslintrc.js
 
 
