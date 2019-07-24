@@ -39,11 +39,14 @@ const addInitialUsers = () => {
 
   const reset = () => {
     deleteAllUsers();
+    addInitialUsers();
+    
+    
   }
 
   //after and before hooks
-  beforeEach(addInitialUsers)
-  afterEach(reset)
+  beforeEach(reset)
+  //afterEach(reset)
 
   it('Initial 2 Users are loaded', () => {
     getUsers().should('have.length', 2)

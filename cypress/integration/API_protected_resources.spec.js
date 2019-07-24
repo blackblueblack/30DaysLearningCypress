@@ -1,6 +1,6 @@
 /// <reference types="Cypress" />
 
-context('Protected endpoints - role-based testing', () => {
+context('Protected endpoints: role-based testing', () => {
 
   let user
 
@@ -57,12 +57,12 @@ context('Protected endpoints - role-based testing', () => {
       getUsers().its('body').should('have.length', 2)
     })
 
-    it('Each User has expected properties', () => {
+    it('Each user has expected properties', () => {
       getUsers().its('body').each(value =>
         expect(value).to.have.all.keys('id', 'username', 'firstName', 'lastName', 'role'))
     })
 
-    it('Admin has role "admin" ', () => {
+    it('Admin has the role: "admin" ', () => {
       cy.request({
         url: 'http://localhost:4000/users/1',
         auth: {
@@ -108,7 +108,7 @@ context('Protected endpoints - role-based testing', () => {
       }))
     })
 
-    it('Normal User has role "User" ', () => {
+    it('Normal user has the role: "User" ', () => {
       cy.request({
         url: 'http://localhost:4000/users/2',
         auth: {
