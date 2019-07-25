@@ -169,11 +169,6 @@ context("automationpractice website testing", () => {
           })
       })
     })
-    //TOD0
-    // // it('Slider', () => {
-    // //    cy.clickRandomCategory()
-    // //    cy.get('.ui-slider-handle').first().invoke('val', 25).trigger('mousemove').trigger('mousedown')
-    // })
   })
 
   describe('Contact Form Page tests', () => {
