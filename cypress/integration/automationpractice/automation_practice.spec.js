@@ -1,5 +1,21 @@
 /// <reference types="Cypress" />
 
+//Headers locators.
+const {productOnMainPage, categoriesMenu, categoriesMenuMobile, cartOnhoverBlock, cartOnhoverBlockCheckoutButton, searchProductInputField, autocompleteListForSearchProduct, cartProductsQuantity, contactLink} = require ('./header_locators');
+
+//Product page locators. 
+const {closeModalProductAdded, addToCart, continueShoppingButton, sizeSelectField} = require ('./product_page_locators');
+
+//Category page locators. 
+const {allFiltersCheckboxes} = require ('./category_page_locators');
+
+//Contact page locators
+const {messageField, subjectSelection, emailInputField, orderIdInputField, fileUploadInputField, submitFormButton, alertAfterSubmit} = require ('./contact_page_locators');
+
+//Search result page locators
+const {alertAfterSearchSubmit} = require ('./search_result_page_locators');
+
+
 context("automationpractice website testing", () => {
   beforeEach(() => {
     cy.visit('http://automationpractice.com/index.php');
@@ -17,12 +33,12 @@ context("automationpractice website testing", () => {
           //Change screen size according value from the array. 
           cy.viewport(size);
           //Check if categories list in menu is not visible 
-          cy.get('.sf-menu').should('not.be.visible');
+          categoriesMenu().should('not.be.visible');
           //Click on "Categories" block
-          cy.get('.cat-title').click();
+          categoriesMenuMobile().click();
           //Verify if list of categories is presented
           //by clicking on first category. 
-          cy.get('.sf-menu').find('li').first().click();
+          categoriesMenu().find('li').first().click();
           //Assert new url. 
           cy.url().should('include', 'controller=category');
         })
@@ -35,10 +51,10 @@ context("automationpractice website testing", () => {
           //Change screen size according value from the array. 
           cy.viewport(size);
           //Check if categories block menu is not visible 
-          cy.get('.cat-title').should('not.be.visible');
+          categoriesMenu().should('be.visible');
           //Verify if categories list is visible 
           //by clicking on its firts element.
-          cy.get('.sf-with-ul').first().click();
+          categoriesMenu().children().first().click();
           //Assert new url. 
           cy.url().should('include', 'controller=category');
         })
@@ -50,14 +66,14 @@ context("automationpractice website testing", () => {
       it('Header: Verify if "View my shopping cart" drop-down is displayed on hover and "Check out" button can be clicked', () => {
         //Get all "Add to cart buttons" from main page
         //and click on firts button to add product to cart.
-        cy.get('.ajax_add_to_cart_button').first().click();
+        productOnMainPage().first().click();
         //Close modal which confirms that product has been added.
-        cy.get('.cross').click();
+        closeModalProductAdded().click();
         //Get drop-down cart block and verify if by default it is hidden. 
         //Force the drop-down block to be visible by invoke('show').
-        cy.get('.cart_block').should('be.hidden').invoke('show');
+        cartOnhoverBlock().should('be.hidden').invoke('show');
         //Click on check out button. 
-        cy.get('#button_order_cart').click();
+        cartOnhoverBlockCheckoutButton().click();
         //Assert redirection to new url.
         cy.url().should('include', 'controller=order');
       })
@@ -78,23 +94,23 @@ context("automationpractice website testing", () => {
             //Custom command
             cy.searchProduct(product);
             cy.contains(returned_info).should('be.visible')
-            cy.get('.search_query').clear();
+            searchProductInputField().clear();
           })
         })
         //Click search when there is no input 
-        cy.get('#searchbox > .btn').click();
+        searchProductInputField().type('{enter}');
         //Assert if alert with expected text is visible. 
-        cy.get('.alert').should('contain', 'Please enter a search keyword');
+        alertAfterSearchSubmit().should('contain', 'Please enter a search keyword');
       })
 
       it('Header: Verify if autocomplete drop-down list for search input field is selectable', () => {
         //Get product search input field
-        cy.get('#search_query_top').type('dress');
+        searchProductInputField().type('dress');
         //Get whole autocomplete drop-down list element
         //and find all <li> tags within it. 
         //Check if there is <li> tag which contains "Dress" text.
         //Click on the returned element.
-        cy.get('.ac_results').find('li').contains('Dress').click();
+        autocompleteListForSearchProduct().find('li').contains('Dress').click();
         //Assert url to verify if click on drop-down element redirects to expeted page.
         cy.url().should('include', 'controller=product');
       })
@@ -103,16 +119,15 @@ context("automationpractice website testing", () => {
         //Function which asserts state of the Cart containing 1 product.
         const testCartState = () => {
           cy.url().should('include', 'controller=product')
-          cy.get('.ajax_cart_quantity').first().invoke('text').should('equal', '1')
+          cartProductsQuantity().first().invoke('text').should('equal', '1')
         }
-       
         //Invoke custom command which navigates to random product page.
         cy.clickRandomProduct();
         //Add selected product to cart
-        cy.get('#add_to_cart').click();
+        addToCart().click();
         //Select 'to continue shopping' on modal.
         //Assert state of cart (if it presents correct number).
-        cy.get('.continue').click().then(testCartState);
+        continueShoppingButton().click().then(testCartState);
         //Reload page 
         //and assert the Cart's state (should keep previous number of products).
         cy.reload().then(testCartState)
@@ -127,7 +142,7 @@ context("automationpractice website testing", () => {
       //Get select size input field.
       //Find its option with title "S". 
       //Verify if "S" option has attribute "selected".
-      cy.get("#group_1").find("[title=S]").should("have.attr", "selected");
+      sizeSelectField().find("[title=S]").should("have.attr", "selected");
     })
   })
 
@@ -139,19 +154,19 @@ context("automationpractice website testing", () => {
       //Check all checkboxes. 
       //Get parent of each checkbox. 
       //Verify if parent of each checkbox has class 'checked' which is added when element is checked.
-      cy.get('.checkbox').check().parent().should('have.class', 'checked');
+      allFiltersCheckboxes().check().parent().should('have.class', 'checked');
       //Get all filters checkkoxes.
       //Uncheck all checkboxes. 
       //Get parent of each checkbox. 
       //Verify if parent of each checkbox doesn't have class 'checked' which is removed when element is unchecked.
-      cy.get('.checkbox').uncheck().parent().should('not.have.class', 'checked');
+      allFiltersCheckboxes().uncheck().parent().should('not.have.class', 'checked');
     })
 
     it('Category Page: Random checkbox checking and unchecking', () => {
       //Custom command 
       cy.clickRandomCategory();
       //Get lenght of all checkboxes, 
-      cy.get('.checkbox').its('length').then(($lenght) => {
+      allFiltersCheckboxes().its('length').then(($lenght) => {
         //Create variable with generated random naumber. 
         //Random number is generated for range from 0 to checkboxes list length - 1
         const randomNumber = Cypress._.random(0, $lenght);
@@ -159,7 +174,7 @@ context("automationpractice website testing", () => {
         //From list of checkboxes select 1 random checkbox. 
         //Check it and assert if its parent has 'checked' class. 
         //Use callback function to store parent
-        cy.get('.checkbox').eq(randomNumber).check()
+        allFiltersCheckboxes().eq(randomNumber).check()
           .parent().should('have.class', 'checked').then(($checkbox) => {
             //Since '$checkbox" stores parent of tested checbox,
             //we need to find descendent checkbox again, 
@@ -174,16 +189,16 @@ context("automationpractice website testing", () => {
   describe('Contact Form Page tests', () => {
     it("Send message with file uploaded", () => {
       //Navigate from Main Page to Contact Form Page.
-      cy.contains('Contact us').click();
+      contactLink().click();
       //Check redirection by asserting url. 
       cy.url().should('include', 'controller=contact')
       //Fill in all fields. 
-      cy.get('#message').type('messsssage');
-      cy.get('#id_contact').select('Webmaster');
-      cy.get('#email').type('test@test.pl');
-      cy.get('#id_order').type('xxxx');
+      messageField().type('messsssage');
+      subjectSelection().select('Webmaster');
+      emailInputField().type('test@test.pl');
+      orderIdInputField().type('xxxx');
       //Before uploading file assert empty input filed text placeholder. 
-      cy.get('.filename').should('contain', 'No file selected');
+      fileUploadInputField().should('contain', 'No file selected');
       //Get file to upload from fixture. 
       //Get file upload input field. 
       //Provide its properties. 
@@ -200,11 +215,11 @@ context("automationpractice website testing", () => {
       //Check if file is uploaded by asserting input filed text. 
       cy.get('.filename').should('contain', 'file_to_upload.txt');
       //Submit form. 
-      cy.get("#submitMessage").click();
+      submitFormButton().click();
       //Assert if url is the same 
       cy.url().should('include', 'controller=contact')
       //Assert alert text 
-      cy.get('.alert').should('contain', 'Your message has been successfully sent to our team.');
+      alertAfterSubmit().should('contain', 'Your message has been successfully sent to our team.');
     })
   })
 })

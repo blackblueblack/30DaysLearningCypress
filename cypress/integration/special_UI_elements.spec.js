@@ -20,12 +20,10 @@ context('Special UI elements testing', () => {
   describe('Select menu testing', () => {
 
     beforeEach( ()=> {
-      
       cy.visit('https://demoqa.com/selectmenu/');
-
       //Getting data file and aliasing it for later usage (data file contains required list of speed options).
-      cy.fixture('demoqa_site_data').as('demoqa_site_data')
-    });
+      cy.fixture('demoqa_site_data').as('demoqa_site_data');
+    })
 
     it('Compare DOM options list with required list', () => {
       //Gettting aliased data and returning it with then() callback function. 
@@ -39,15 +37,15 @@ context('Special UI elements testing', () => {
           availableSpeedOptions.push($elem.text())
         }).then(() => {
           //Assert if list of DOM speed options is in accordance with required speed list option. 
-          expect(availableSpeedOptions).to.be.eql(requiredSpeedOptions)
+          expect(availableSpeedOptions).to.be.eql(requiredSpeedOptions);
         })
       })
     })
 
     it('Select random element from select menu', () => {
-      //Use demoqa site data - return it as then() callbackfunction. 
+      //Use demoqa site data - return it using then() callbackfunction. 
       cy.get('@demoqa_site_data').then((demoqadata) => {
-        //Variable which stores speed value randomy selected from demoqa site data. 
+        //Variable which stores speed value randomly selected from demoqa site data. 
           let randomSpeedValue = Cypress._.sample(demoqadata.speedOptionsList) 
         //Click on select menu.    
           cy.get('#speed-button').click()
