@@ -1,8 +1,5 @@
 // <reference types="Cypress" />
 
-
-
-
 //LOCATORS
 const ALL_FILTERS_CHECKBOXES = '.checkbox';
 

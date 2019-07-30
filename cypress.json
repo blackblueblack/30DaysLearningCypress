@@ -2,7 +2,6 @@
  "reporter": "cypress-multi-reporters", 
  "reporterOptions": {
    "configFile": "reporterOptions.json"
- }, 
- "baseUrl": "https://flask-rest-api-demo.herokuapp.com"
-   
+ }
+ 
  }

@@ -1,19 +1,22 @@
 /// <reference types="Cypress" />
 
 //Headers locators.
-const {productOnMainPage, categoriesMenu, categoriesMenuMobile, cartOnhoverBlock, cartOnhoverBlockCheckoutButton, searchProductInputField, autocompleteListForSearchProduct, cartProductsQuantity, contactLink} = require ('./header_locators');
+const {categoriesMenu, categoriesMenuMobile, cartOnhoverBlock, cartOnhoverBlockCheckoutButton, searchProductInputField, autocompleteListForSearchProduct, cartProductsQuantity, contactLink} = require ('../../support/utils/automationpractice_utils/header_locators');
+
+//Main page locators. 
+const {productAddToCartButton} = require ('../../support/utils/automationpractice_utils/main_page_locators');
 
 //Product page locators. 
-const {closeModalProductAdded, addToCart, continueShoppingButton, sizeSelectField} = require ('./product_page_locators');
+const {closeModalProductAdded, addToCart, continueShoppingButton, sizeSelectField} = require ('../../support/utils/automationpractice_utils/product_page_locators');
 
 //Category page locators. 
-const {allFiltersCheckboxes} = require ('./category_page_locators');
+const {allFiltersCheckboxes} = require ('../../support/utils/automationpractice_utils/category_page_locators');
 
-//Contact page locators
-const {messageField, subjectSelection, emailInputField, orderIdInputField, fileUploadInputField, submitFormButton, alertAfterSubmit} = require ('./contact_page_locators');
+//Contact page locators.
+const {messageField, subjectSelection, emailInputField, orderIdInputField, fileUploadInputField, submitFormButton, alertAfterSubmit} = require ('../../support/utils/automationpractice_utils/contact_page_locators');
 
-//Search result page locators
-const {alertAfterSearchSubmit} = require ('./search_result_page_locators');
+//Search result page locators.
+const {alertAfterSearchSubmit} = require ('../../support/utils/automationpractice_utils/search_result_page_locators');
 
 
 context("automationpractice website testing", () => {
@@ -66,7 +69,7 @@ context("automationpractice website testing", () => {
       it('Header: Verify if "View my shopping cart" drop-down is displayed on hover and "Check out" button can be clicked', () => {
         //Get all "Add to cart buttons" from main page
         //and click on firts button to add product to cart.
-        productOnMainPage().first().click();
+        productAddToCartButton().first().click();
         //Close modal which confirms that product has been added.
         closeModalProductAdded().click();
         //Get drop-down cart block and verify if by default it is hidden. 

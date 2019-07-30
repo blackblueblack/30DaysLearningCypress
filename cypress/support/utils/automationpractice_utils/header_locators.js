@@ -1,7 +1,7 @@
 /// <reference types="Cypress" />
 
 //LOCATORS
-const PRODUCT_ON_MAIN_PAGE = '.ajax_add_to_cart_button';
+const CATEGORIES_BLOCK_MENU = '#block_top_menu';
 const CATEGORIES_MENU = '.sf-menu';
 const CATEGORIES_MENU_MOBILE = '.cat-title';
 const SEARCH_PRODUCT_INPUT_FIELD = '#search_query_top';
@@ -15,7 +15,7 @@ const CART_ONHOVER_BLOCK = '.cart_block';
 const CART_ONHOVER_BLOCK_CHECKOUT_BUTTON = '#button_order_cart';
 
 //METHODS TO GET LOCATORS
-const productOnMainPage = () => cy.get(PRODUCT_ON_MAIN_PAGE);
+const categoriesBlockMenu = () => cy.get(CATEGORIES_BLOCK_MENU)
 const categoriesMenu = () => cy.get(CATEGORIES_MENU);
 const categoriesMenuMobile = () => cy.get(CATEGORIES_MENU_MOBILE);
 const cartOnhoverBlock = () => cy.get(CART_ONHOVER_BLOCK);
@@ -28,6 +28,6 @@ const contactLink = () => cy.get(CONTACT_LINK);
 
 //EXPORT METHODS 
 module.exports = {
-  productOnMainPage, categoriesMenu, categoriesMenuMobile, cartOnhoverBlock, cartOnhoverBlockCheckoutButton, searchProductInputField, autocompleteListForSearchProduct, cartProductsQuantity, contactLink}
+  categoriesMenu, categoriesMenuMobile, cartOnhoverBlock, cartOnhoverBlockCheckoutButton, searchProductInputField, autocompleteListForSearchProduct, cartProductsQuantity, contactLink, categoriesBlockMenu}
 
 
