@@ -190,7 +190,7 @@ context("automationpractice website testing", () => {
   })
 
   describe('Contact Form Page tests', () => {
-    it("Send message with file uploaded", () => {
+    it.only("Send message with file uploaded", () => {
       //Navigate from Main Page to Contact Form Page.
       contactLink().click();
       //Check redirection by asserting url. 
@@ -208,6 +208,7 @@ context("automationpractice website testing", () => {
       cy.fixture('file_to_upload.txt', 'base64').then(fileContent => {
         cy.get('#fileUpload').upload(
           {
+            fileContent,
             fileName: 'file_to_upload.txt',
             mimeType: 'text'
           },

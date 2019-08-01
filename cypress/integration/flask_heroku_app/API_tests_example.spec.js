@@ -1,6 +1,6 @@
 /// <reference types="Cypress" />
 
-context("Test simple Flask app API", () => {
+context.skip("Test simple Flask app API", () => {
 
   //TODO - change url so that it can work without baseUrl in cypress json 
   //const baseUrl = 'https://flask-rest-api-demo.herokuapp.com'

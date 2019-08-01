@@ -1,6 +1,6 @@
 /// <reference types="Cypress" />
 
-context('Protected endpoints: role-based testing', () => {
+context.skip('Protected endpoints: role-based testing', () => {
 
   let user
 

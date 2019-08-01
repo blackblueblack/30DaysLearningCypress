@@ -1,12 +1,10 @@
 /// <reference types="Cypress" />
 
-context('TODO app tests', () => {
+context.skip('TODO app tests', () => {
   describe('Requests stubbing', () => {
     beforeEach(() => {
-
-      //TODO --> Create/clear tasks before/after tests runs. 
-      cy.visit('http://localhost:5000/');
       cy.server();
+      cy.visit('http://localhost:5000/');
     })
 
     it('GET /todos - tasks getting request stubbing', () => {

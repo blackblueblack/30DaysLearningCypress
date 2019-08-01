@@ -4,7 +4,7 @@
 //Tests for different website are mixed in this spec.js and their organization can differ form best practices.
 
 
-context('Special UI elements testing', () => {
+context.skip('Special UI elements testing', () => {
   describe('Slider tests', () => {
     it('Selecting value on slider', () => {
       cy.visit('https://the-internet.herokuapp.com/horizontal_slider');

@@ -22,7 +22,7 @@ Given('I submit valid or inalid product name', datatable => {
 
   const table = datatable.hashes();
   table.forEach(row => {
-    cy.visit('url');
+    cy.visit(url);
     cy.get('#search_query_top').type(row.product);
     cy.get('#searchbox > .btn').click();
     cy.get('#search_query_top').clear();
