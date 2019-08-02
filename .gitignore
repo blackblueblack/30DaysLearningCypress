@@ -3,5 +3,6 @@ cypress/reports/
 mochareports/
 cypress.env.json
 .eslintrc.js
+cypress/videos/
 
 

@@ -15,15 +15,11 @@
 
 //Import commands.js using ES2015 syntax:
 import './commands'
-// import { config } from 'bluebird';
 
-// Alternatively you can use CommonJS syntax:
-// require('./commands')
 
-//require('cypress-file-upload')
-
-// Cypress.on('uncaught:exception', (err, runnable) => {
-//   // returning false here prevents Cypress from
-//   // failing the test
-//   return false})
+//In support/index.js file we can put event handlers to handle the exceptions. 
+Cypress.on('uncaught:exception', (err, runnable) => {
+  // returning false here prevents Cypress from
+  // failing the test
+  return false})
 

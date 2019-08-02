@@ -190,7 +190,7 @@ context("automationpractice website testing", () => {
   })
 
   describe('Contact Form Page tests', () => {
-    it.only("Send message with file uploaded", () => {
+    it("Send message with file uploaded", () => {
       //Navigate from Main Page to Contact Form Page.
       contactLink().click();
       //Check redirection by asserting url. 

@@ -4,10 +4,13 @@
 //Tests for different website are mixed in this spec.js and their organization can differ form best practices.
 
 
-context.skip('Special UI elements testing', () => {
-  describe('Slider tests', () => {
+context('Special UI elements testing', () => {
+  describe('the-internet app tests', () => {
+
+    const baseUrl = 'https://the-internet.herokuapp.com/'
+
     it('Selecting value on slider', () => {
-      cy.visit('https://the-internet.herokuapp.com/horizontal_slider');
+      cy.visit(`${baseUrl}horizontal_slider`);
       //Get slider and invoke 'val' method on it. 
       //Val method is invoked with integer value which is expected to be selected on slider. 
       //Trigger command triggers event ('change') on slider value.
@@ -15,17 +18,46 @@ context.skip('Special UI elements testing', () => {
       //Assert text value displayed on slider. 
       cy.get('#range').should('have.text', '5');
     })
+
+    it('Accepting alert', () => {
+      cy.visit(`${baseUrl}javascript_alerts`);
+      //Click button which invokes alert.
+      //window.confirm() is called by app when clicling button. 
+      cy.contains('Click for JS Confirm').click();
+
+      //Emit cypress window:confirm event to control alert behaviour. 
+      //Cypress event: window:confirm fires event when window.confirm() is called by app. 
+      //Returning true accepts aleert, false decilnes. 
+      cy.on('window:confirm', (str) => {
+        expect(str).to.eq('I am a JS Confirm');
+        return true;
+      })
+    })
+
+    it('Switching context to iFrame', () => {
+      cy.visit(`${baseUrl}iframe`)
+      //Get iFrame by id and store it with then() callback function to continue work with it. 
+      cy.get('#mce_0_ifr').then($iframe => {
+        //Variable which stores iFrame body.
+        const body = $iframe.contents().find('body')
+        //Wraps body and create alias for it. 
+        cy.wrap(body).as('iFrame');
+        //Asserts if iFrame body text contains expected placeholder. 
+        cy.get('@iFrame').should('contain', 'Your content goes here.')
+      })
+    })
   })
 
-  describe('Select menu testing', () => {
+  describe('demoqa app tests', () => {
 
-    beforeEach( ()=> {
+    beforeEach(() => {
       cy.visit('https://demoqa.com/selectmenu/');
-      //Getting data file and aliasing it for later usage (data file contains required list of speed options).
+      //Getting data file and aliasing it for later usage. 
+      //Data file contains required list of speed options. 
       cy.fixture('demoqa_site_data').as('demoqa_site_data');
     })
 
-    it('Compare DOM options list with required list', () => {
+    it('[Select menu list] contains all expected elements', () => {
       //Gettting aliased data and returning it with then() callback function. 
       cy.get('@demoqa_site_data').then((demoqadata) => {
         //Variable which stores required speed options (taken from fixture file). 
@@ -42,20 +74,20 @@ context.skip('Special UI elements testing', () => {
       })
     })
 
-    it('Select random element from select menu', () => {
+    it('Can select random element from select menu', () => {
       //Use demoqa site data - return it using then() callbackfunction. 
       cy.get('@demoqa_site_data').then((demoqadata) => {
         //Variable which stores speed value randomly selected from demoqa site data. 
-          let randomSpeedValue = Cypress._.sample(demoqadata.speedOptionsList) 
+        let randomSpeedValue = Cypress._.sample(demoqadata.speedOptionsList)
         //Click on select menu.    
-          cy.get('#speed-button').click()
+        cy.get('#speed-button').click()
         //Assert if expanded select menu list is visible. 
-          cy.get('#speed-menu').should('be.visible')
+        cy.get('#speed-menu').should('be.visible')
         //Click speed value.
-          cy.get('li').contains(randomSpeedValue).click().then(() => {
-        //Assert if expanded select menu list is not visible. 
+        cy.get('li').contains(randomSpeedValue).click().then(() => {
+          //Assert if expanded select menu list is not visible. 
           cy.get('#speed-menu').should('not.be.visible')
-          })
+        })
       })
     })
   })

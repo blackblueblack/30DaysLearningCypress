@@ -5,3 +5,4 @@ services:
     build: .
     container_name: cypress
     command: npx cypress run 
+    
