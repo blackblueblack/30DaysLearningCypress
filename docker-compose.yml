@@ -5,4 +5,5 @@ services:
     build: .
     container_name: cypress
     command: npx cypress run 
-    
+    volumes:
+    -"path/to/local/directory":"path/to/docker/directo

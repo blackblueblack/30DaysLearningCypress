@@ -25,7 +25,8 @@
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
 
-import 'cypress-file-upload'
+import 'cypress-file-upload';
+import '@percy/cypress';
 
 import * as headerLocators from './utils/automationpractice_utils/header_locators'
 

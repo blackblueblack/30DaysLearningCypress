@@ -19,7 +19,7 @@ const {messageField, subjectSelection, emailInputField, orderIdInputField, fileU
 const {alertAfterSearchSubmit} = require ('../../support/utils/automationpractice_utils/search_result_page_locators');
 
 
-context("automationpractice website testing", () => {
+context.skip("automationpractice website testing", () => {
   beforeEach(() => {
     cy.visit('http://automationpractice.com/index.php');
     cy.fixture("input_data").as("inputData");

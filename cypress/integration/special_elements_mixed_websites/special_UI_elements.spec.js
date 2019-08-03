@@ -4,7 +4,7 @@
 //Tests for different website are mixed in this spec.js and their organization can differ form best practices.
 
 
-context('Special UI elements testing', () => {
+context.skip('Special UI elements testing', () => {
   describe('the-internet app tests', () => {
 
     const baseUrl = 'https://the-internet.herokuapp.com/'
@@ -25,9 +25,9 @@ context('Special UI elements testing', () => {
       //window.confirm() is called by app when clicling button. 
       cy.contains('Click for JS Confirm').click();
 
-      //Emit cypress window:confirm event to control alert behaviour. 
-      //Cypress event: window:confirm fires event when window.confirm() is called by app. 
-      //Returning true accepts aleert, false decilnes. 
+      //Emit cypress 'window:confirm' event to control alert behaviour. 
+      //Cypress event - 'window:confirm' fires event when 'window.confirm()' is called by app. 
+      //Returning true accepts alert, false declines. 
       cy.on('window:confirm', (str) => {
         expect(str).to.eq('I am a JS Confirm');
         return true;
@@ -40,9 +40,9 @@ context('Special UI elements testing', () => {
       cy.get('#mce_0_ifr').then($iframe => {
         //Variable which stores iFrame body.
         const body = $iframe.contents().find('body')
-        //Wraps body and create alias for it. 
+        //Wrap body and create alias for it. 
         cy.wrap(body).as('iFrame');
-        //Asserts if iFrame body text contains expected placeholder. 
+        //Assert if iFrame body text contains expected placeholder. 
         cy.get('@iFrame').should('contain', 'Your content goes here.')
       })
     })

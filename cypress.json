@@ -3,7 +3,6 @@
  "reporterOptions": {
    "configFile": "reporterOptions.json"
  }, 
- "video": true,
- "screenshotsFolder": "/home/basia-ubuntu/cypress_data/"
+ "video": true
  
  }

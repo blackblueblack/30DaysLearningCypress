@@ -88,5 +88,6 @@ context.skip('TODO app tests', () => {
       //Wait for stubbed DELETE response. 
       cy.wait('@todoDeletion')
     })
+
   })
 })
