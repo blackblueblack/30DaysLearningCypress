@@ -32,8 +32,28 @@ import * as headerLocators from './utils/automationpractice_utils/header_locator
 
 import * as mainPageLocators from './utils/automationpractice_utils/main_page_locators'
 
+import * as userAccountPageLocators from './utils/automationpractice_utils/account_page_locators'
+
+
+
+//Log in to user account
+Cypress.Commands.add('login', (email, password) => {
+      userAccountPageLocators.signInLink().click();
+      cy.url().should('include', 'my-account');
+      userAccountPageLocators.loginEmailInputField().type(email);
+      userAccountPageLocators.loginPasswordInputField().type(password);
+      userAccountPageLocators.submitLoginButton().click();
+      cy.contains('Sign out').should('be.visible');
+})
+
+//Clear cookies
+Cypress.Commands.add('clearCookiesCustom', () => {
+  cy.visit('http://automationpractice.com/index.php');
+  cy.clearCookies();
+})
+
 //Click random category on Website Header to navigate to Category Page. 
-Cypress.Commands.add("clickRandomCategory", () => {
+Cypress.Commands.add('clickRandomCategory', () => {
   headerLocators.categoriesBlockMenu().find('ul').first().children().its('length').then(($lenght) => {
     const randomNumber = Cypress._.random(0, $lenght - 1);
     headerLocators.categoriesBlockMenu().find('ul').first().children().eq(randomNumber).click();
@@ -42,7 +62,7 @@ Cypress.Commands.add("clickRandomCategory", () => {
 })
 
 //Click random product on Main Page to navigate to Product Page. 
-Cypress.Commands.add("clickRandomProduct", () => {
+Cypress.Commands.add('clickRandomProduct', () => {
   mainPageLocators.productOnMainPage().children().its('length').then(($lenght) => {
     const randomNumber = Cypress._.random(0, $lenght - 1);
     mainPageLocators.productOnMainPage().children().eq(randomNumber).click();

@@ -2,7 +2,7 @@
   "devDependencies": {
     "@percy/cypress": "^2.0.0",
     "cypress": "^3.4.1",
-    "cypress-cucumber-preprocessor": "^1.12.0",
+    "cypress-cucumber-preprocessor": "^1.13.0",
     "cypress-file-upload": "^3.3.3",
     "cypress-multi-reporters": "1.1.22",
     "dark": "0.0.2-2",
@@ -12,9 +12,6 @@
     "mochawesome": "4.0.1",
     "mochawesome-merge": "2.0.1",
     "mochawesome-report-generator": "4.0.0"
-  },
-  "cypress-cucumber-preprocessor": {
-    "nonGlobalStepDefinitions": true
   },
   "dependencies": {
     "cypress-dark": "^1.7.13",

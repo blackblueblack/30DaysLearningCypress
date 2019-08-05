@@ -1,6 +1,6 @@
 /// <reference types="Cypress" />
 
-context.skip('TODO app tests', () => {
+context('TODO app tests', () => {
   describe('Requests stubbing', () => {
     beforeEach(() => {
       cy.server();

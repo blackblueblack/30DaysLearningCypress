@@ -17,9 +17,11 @@
 import './commands'
 
 
+
 //In support/index.js file we can put event handlers to handle the exceptions. 
 Cypress.on('uncaught:exception', (err, runnable) => {
   // returning false here prevents Cypress from
   // failing the test
   return false})
 
+  
